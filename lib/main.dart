@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project/views/changepass.dart';
 import 'package:project/views/loginview.dart';
 import 'package:project/views/registerview.dart';
-import 'views/EmailVericationview.dart';
+import 'views/emailVericationview.dart';
 import 'views/mainpage.dart';
 
 void main() {
@@ -20,7 +21,8 @@ void main() {
         '/login/':(context) => const LoginView(),
         '/register/':(context) => const RegisterView(),
         '/mainpage/':(context) => const MainPage(),
-        
+        '/email_verification/':((context) => const EmailVerification()),
+        '/changepass/':((context) => const Changepassword())
       },
     ));
 }

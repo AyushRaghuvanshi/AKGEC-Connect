@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project/views/popup.dart';
 
 
 
@@ -76,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             
                            Padding(
-                             padding: const EdgeInsets.only(bottom: 30),
+                             padding: const EdgeInsets.only(bottom: 0),
                              child: Center(
                    
                    child: Column(
@@ -97,6 +98,26 @@ class _LoginViewState extends State<LoginView> {
                              ),
                            ),
                             
+        
+       Row(
+         mainAxisAlignment: MainAxisAlignment.end,
+         children: [
+           Padding(
+             padding: const EdgeInsets.only(right: 25,bottom: 30),
+             child: TextButton(child: const Text("Forgot Password?"),
+                style:TextButton.styleFrom(
+                              primary: Colors.black,
+                              backgroundColor: Colors.white,
+                              onSurface: Colors.grey),
+                onPressed: ()  {
+                  Navigator.of(context).pushNamed('/changepass/');
+                    
+                },
+                
+      ),
+           ),
+         ],
+       ),
                             Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Center(
@@ -110,35 +131,65 @@ class _LoginViewState extends State<LoginView> {
                               backgroundColor: Colors.black,
                               onSurface: Colors.grey,
                     ),
-                            
                             onPressed: ()async{
-                             
+                             try{
                               final email=_email.text;
                               final password=_password.text;
-                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                              if(email==''&&password==''){
+                                await showErrorPopup(context, 'Please enter your Email ID and Password');
+                                return;
+                              }else if(email==''){
+                                await showErrorPopup(context, 'Please enter you Email ID');
+                                return;
+                              }else if(password ==''){
+                                await showErrorPopup(context, 'Please enter you Password');
+                                return;
+                              }
                               
-                              Navigator.of(context).pushNamedAndRemoveUntil('/mainpage/', (route) => false);
+                              await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                             } on FirebaseAuthException catch(e){
+                               switch(e.code){
+                                case 'wrong-password':
+                                  await showErrorPopup(context, 'Wrong Password');
+                                  return;
+                                case 'invalid-email':
+                                  await showErrorPopup(context, 'Enter a valid Email ID.');
+                                  return;
+                                case 'unknown':
+                                  await showErrorPopup(context,'Opps, looks like an Error occured. Please contant the Dev');
+                                  return;
+                               }
+                             }
+                              final user = FirebaseAuth.instance.currentUser;
+                              if(user!=null){
+                                if(user.emailVerified){
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/mainpage/', (route) => false);
+                                }
+                                else{
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/email_verification/', (route) => false);
+                                }
+                              }
+                              
                             }, 
                             child: const Text("Login",style:TextStyle(color: Colors.white),)),
                     ),
                   ),
                             ),
-                            
-                            
                             const Center(child: Text("Don't have an account?",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black45),)),                          
                             Center(child: TextButton(onPressed: () {
                               Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
                             }, style:TextButton.styleFrom(
                               primary: Colors.black,
-                
                               backgroundColor: Colors.white,
                               onSurface: Colors.grey)
                               ,child: const Text("Register",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black),),))
                           ],
                         ),
                     ),
+                  
                   ),
                 ),
+       
     );
   }
 }
