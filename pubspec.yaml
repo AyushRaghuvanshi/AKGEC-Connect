@@ -38,6 +38,10 @@ dependencies:
   firebase_analytics: ^9.1.4
   firebase_auth: ^3.3.13
   cloud_firestore: ^3.1.11
+  permission_handler: ^9.2.0
+  image_picker: ^0.8.5
+  firebase_storage: ^10.2.12
+  conditional_builder: ^1.0.2
 
 
 dev_dependencies:
@@ -62,7 +66,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/
+   - assets/
   
   # To add assets to your application, add an assets section, like this:
   # assets:

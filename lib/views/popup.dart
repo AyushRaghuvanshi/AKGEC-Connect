@@ -1,7 +1,7 @@
 
 
 
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 Future<bool> showLogoutPop(BuildContext context){
@@ -36,6 +36,28 @@ Future<bool> showErrorPopup(BuildContext context, String text){
     actions:  [
       TextButton(onPressed: () {
         Navigator.of(context).pop();
+      }, child: const Text("Ok")),
+      
+    ],
+
+   );
+  }
+  ).then((value) => value ?? false);
+  
+}
+
+
+
+Future<bool> showPopup(BuildContext context, String text,String title){
+  
+  return showDialog(context: context, 
+  builder: (context){
+   return  AlertDialog(
+     title:  Text(title),
+     content: Text(text),
+    actions:  [
+      TextButton(onPressed: () {
+        Navigator.of(context).pushNamedAndRemoveUntil('/login/', (route) => false);
       }, child: const Text("Ok")),
       
     ],

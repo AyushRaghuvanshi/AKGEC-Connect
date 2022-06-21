@@ -9,8 +9,6 @@ import 'package:project/views/popup.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key, }) : super(key: key);
-  
-
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -148,7 +146,11 @@ class _LoginViewState extends State<LoginView> {
                               
                               await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
                              } on FirebaseAuthException catch(e){
+                               print(e.code);
                                switch(e.code){
+                                case 'user-not-found':
+                                  await showErrorPopup(context, 'User not found');
+                                  return; 
                                 case 'wrong-password':
                                   await showErrorPopup(context, 'Wrong Password');
                                   return;
