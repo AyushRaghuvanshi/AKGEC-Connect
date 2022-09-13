@@ -7,15 +7,14 @@ import 'package:project/views/loginview.dart';
 import 'package:project/views/profilecorrection.dart';
 import 'package:project/views/registerview.dart';
 import 'mainpagesections/msgpage.dart';
-import 'views/emailVericationview.dart';
+import 'views/EmailVericationview.dart';
 import 'views/mainpage.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(primarySwatch: Colors.blue),
+    title: 'AKGEC CONNECT',
     home: const HomePage(),
     routes: {
       '/login/': (context) => const LoginView(),

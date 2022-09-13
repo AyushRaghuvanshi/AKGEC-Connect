@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project/mainpagesections/profilesection.dart';
+
 import 'package:project/cards/dmcard.dart';
 
 class MsgPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _MsgPageState extends State<MsgPage> {
         if (snapshots.hasData) {
           var l = snapshots.data;
           users = [];
+          String uid = FirebaseAuth.instance.currentUser!.uid;
           users = (l.docs.map((doc) {
             if (doc.id != uid) {
               return {
@@ -40,14 +42,12 @@ class _MsgPageState extends State<MsgPage> {
                   id: users[i]['id']));
             }
           }
-          // l.forEach((doc) {
-          //   print(doc.id);
-          // });
+
           return Column(
             children: dmcards,
           );
         }
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

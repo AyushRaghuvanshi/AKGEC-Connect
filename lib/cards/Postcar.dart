@@ -1,11 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:project/views/mainpage.dart';
+// ignore_for_file: file_names
 
-import '../mainpagesections/profilesection.dart';
+import 'package:flutter/material.dart';
 
 class Postcard extends StatefulWidget {
-  const Postcard({Key? key, required this.i}) : super(key: key);
-  final int i;
+  const Postcard(
+      {Key? key,
+      required this.post,
+      required this.profilepicture,
+      required this.name})
+      : super(key: key);
+
+  final String post, profilepicture, name;
   @override
   State<Postcard> createState() => _PostcardState();
 }
@@ -30,14 +35,14 @@ class _PostcardState extends State<Postcard> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(200)),
                         child: Image.network(
-                          a['Profile Picture'],
+                          widget.profilepicture,
                           height: 30,
                           width: 30,
                         ),
                       ),
                     ),
                     Text(
-                      a['name'],
+                      widget.name,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     )
@@ -45,7 +50,7 @@ class _PostcardState extends State<Postcard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(15),
-                  child: Text(l.data()[widget.i.toString()]),
+                  child: Text(widget.post),
                 ),
               ],
             ),

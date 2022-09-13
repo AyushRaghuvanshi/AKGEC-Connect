@@ -19,7 +19,8 @@ class dmprofile extends StatefulWidget {
 
 class _dmprofileState extends State<dmprofile> {
   late TextEditingController _msg;
-  String? ui = uid;
+  var uid = FirebaseAuth.instance.currentUser!.uid;
+
   List<String> templist = [];
   List<Widget> msgstream = [];
   bool istream = false;
@@ -29,7 +30,7 @@ class _dmprofileState extends State<dmprofile> {
   @override
   void initState() {
     msg = 0;
-    templist = [widget.id, uid!];
+    templist = [widget.id, uid];
     templist.sort();
 
     s = templist[0] + '-' + templist[1];
@@ -76,16 +77,17 @@ class _dmprofileState extends State<dmprofile> {
                             (BuildContext context, AsyncSnapshot snapshot) {
                           if (snapshot.hasData) {
                             var data = snapshot.data.data();
-                            msg = data.length;
-                            print(data);
-                            msgstream = [];
                             if (data == null)
                               return Container(
                                 height: 630,
                               );
+                            msg = data.length;
+                            print(data);
+                            msgstream = [];
+
                             for (int i = 0; i < data.length; i++) {
                               if (data[i.toString()] != null) {
-                                if (uid! == data[i.toString()]['user']) {
+                                if (uid == data[i.toString()]['user']) {
                                   msgstream.add(Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
@@ -159,7 +161,7 @@ class _dmprofileState extends State<dmprofile> {
                           .set({
                         msg.toString(): {
                           'time': DateTime.now().toIso8601String(),
-                          'user': uid!,
+                          'user': uid,
                           'msg': _msg.text
                         }
                       }, SetOptions(merge: true));

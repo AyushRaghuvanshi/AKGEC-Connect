@@ -16,8 +16,8 @@ class _ProfileState extends State<Profile> {
   late TextEditingController _biography;
   late TextEditingController _sno;
   late TextEditingController _year;
-  var genderint;
-  var branchint;
+  int genderint = 0;
+  int branchint = 0;
 
   DateTime? _datetime = DateTime.now();
   String? imgurl;
@@ -78,24 +78,30 @@ class _ProfileState extends State<Profile> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            
-                          ClipRRect(
-                            borderRadius: const BorderRadius.all(Radius.circular(100)),
-                            child: Image.network(imgurl?? 'https://t3.ftcdn.net/jpg/03/46/83/96/240_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',height: 150,width: 150,))
+                            ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
+                                child: Image.network(
+                                  imgurl ??
+                                      'https://t3.ftcdn.net/jpg/03/46/83/96/240_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',
+                                  height: 150,
+                                  width: 150,
+                                ))
                           ],
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(onPressed: () async {
-                          final user = FirebaseAuth.instance.currentUser;
-                          final uid =user?.uid;
-                          String url= await uploadimage(uid.toString());
-                          setState((){
-                            imgurl=url;
-                            
-                          });
-                        }, child: const Text("Upload Profile Picture")),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              final user = FirebaseAuth.instance.currentUser;
+                              final uid = user?.uid;
+                              String url = await uploadimage(uid.toString());
+                              setState(() {
+                                imgurl = url;
+                              });
+                            },
+                            child: const Text("Upload Profile Picture")),
                       )
                     ],
                   ),
@@ -143,53 +149,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                // DropdownButton<String>(
-                //   value: dropdownValue,
-                //   icon: Icon(Icons.arrow_drop_down),
-                //   iconSize: 24,
-                //   elevation: 16,
-                //   style: TextStyle(color: Colors.red, fontSize: 18),
-                //   underline: Container(
-                //     height: 2,
-                //     color: Colors.deepPurpleAccent,
-                //   ),
-                //   onChanged: (String? data) {
-                //     setState(() {
-                //       print(dropdownValue);
-                //       dropdownValue = data!;
-                //     });
-                //   },
-
-                //   items: items.map<DropdownMenuItem<String>>((String value) {
-                //     print(value);
-                //     return DropdownMenuItem<String>(
-                //       value: value,
-                //       child: Text(value),
-                //     );
-                //   }).toList(),
-                //             // ),
-                //             DropdownButton<String>(
-                //   value: dropdownValue,
-                //   icon: const Icon(Icons.arrow_downward),
-                //   elevation: 16,
-                //   style: const TextStyle(color: Colors.deepPurple),
-                //   underline: Container(
-                //     height: 2,
-                //     color: Colors.deepPurpleAccent,
-                //   ),
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       dropdownValue = newValue!;
-                //     });
-                //   },
-                //   items: <String>['One', 'Two', 'Free', 'Four']
-                //       .map<DropdownMenuItem<String>>((String value) {
-                //     return DropdownMenuItem<String>(
-                //       value: value,
-                //       child: Text(value),
-                //     );
-                //   }).toList(),
-                // ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Center(
@@ -199,17 +158,17 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Gender:"),
+                          const Text("Gender:"),
                           Center(
                             child: SizedBox(
                               width: width,
                               child: DropdownButtonFormField(
                                   dropdownColor: Colors.white,
                                   focusColor: Colors.black,
-                                  hint: Text("Input you gender"),
+                                  hint: const Text("Input you gender"),
                                   items: items.map((items) {
                                     return DropdownMenuItem(
-                                        child: Text('${items}'), value: items);
+                                        child: Text(items), value: items);
                                   }).toList(),
                                   onChanged: (val) {
                                     setState(() {
@@ -237,7 +196,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-
                 Center(
                   child: SizedBox(
                     width: width,
@@ -256,8 +214,9 @@ class _ProfileState extends State<Profile> {
                                       backgroundColor:
                                           MaterialStateProperty.all<Color>(
                                               Colors.black)),
-                                  label: Icon(Icons.arrow_drop_down),
-                                  icon: Icon(Icons.calendar_month_outlined),
+                                  label: const Icon(Icons.arrow_drop_down),
+                                  icon:
+                                      const Icon(Icons.calendar_month_outlined),
                                   onPressed: () {
                                     showDatePicker(
                                             context: context,
@@ -294,33 +253,30 @@ class _ProfileState extends State<Profile> {
                                 decoration: const InputDecoration(
                                     hintText: "Enter your Student No."),
                                 keyboardType: TextInputType.number,
-                                onChanged: (val) async{
+                                onChanged: (val) async {
                                   String s = val;
 
                                   year = "20" + s.substring(0, 2);
-                                  int branch=int.parse(s.substring(2,4));
-                                  branchint=branch;
+                                  int branch = int.parse(s.substring(2, 4));
+                                  branchint = branch;
                                   setState(() {
-                                    switch(branch){
-                                    case 31:
-                                      dropValue="ECE";    
-                                      break;
-                                    case 13:
-                                      dropValue="IT";    
-                                      break;
-                                    case 12:
-                                      dropValue="CS";    
-                                      break;
-                                    case 01:
-                                      dropValue="CSE";    
-                                      break;    
-
-                                  }
-                                  
+                                    switch (branch) {
+                                      case 31:
+                                        dropValue = "ECE";
+                                        break;
+                                      case 13:
+                                        dropValue = "IT";
+                                        break;
+                                      case 12:
+                                        dropValue = "CS";
+                                        break;
+                                      case 01:
+                                        dropValue = "CSE";
+                                        break;
+                                    }
                                   });
-                                  
-                                  _year.text=year;
-                                  
+
+                                  _year.text = year;
                                 },
                               ),
                             ),
@@ -352,21 +308,20 @@ class _ProfileState extends State<Profile> {
                             onChanged: (String? newValue) {
                               setState(() {
                                 dropValue = newValue!;
-                                
-                                switch(dropValue){
+
+                                switch (dropValue) {
                                   case 'IT':
-                                    branchint=13;
+                                    branchint = 13;
                                     break;
                                   case 'ECE':
-                                    branchint=31;
+                                    branchint = 31;
                                     break;
                                   case 'CS':
-                                    branchint=12;
+                                    branchint = 12;
                                     break;
                                   case 'CSE':
-                                    branchint=10;
+                                    branchint = 10;
                                     break;
-
                                 }
                               });
                             },
@@ -383,9 +338,8 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-               
                 Padding(
-                  padding: const EdgeInsets.only(bottom:30.0),
+                  padding: const EdgeInsets.only(bottom: 30.0),
                   child: Center(
                     child: SizedBox(
                       width: width,
@@ -401,9 +355,6 @@ class _ProfileState extends State<Profile> {
                                 controller: _year,
                                 //decoration:  InputDecoration(hintText: year,hintStyle: const TextStyle(color: Colors.black)),
                                 keyboardType: TextInputType.number,
-                                
-                              
-                                  
                               ),
                             ),
                           ),
@@ -412,25 +363,6 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-
-                //           ElevatedButton.icon(
-                //             icon: Icon(Icons.abc),
-                //             label: Icon(Icons.arrow_drop_down_circle),
-                //             onPressed: (){
-                //                 YearPicker(
-                //               onChanged: (value){
-                //                 _year=value;
-                //               },
-                //               initialDate: DateTime.now(),
-                //               selectedDate: _year?? DateTime.now() ,
-                //               firstDate: DateTime(2001),
-                //               lastDate: DateTime(2099),
-
-                //             );
-                //             } ,
-
-                //           )
-                // ,
                 Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: Center(
@@ -459,10 +391,20 @@ class _ProfileState extends State<Profile> {
                             final user = FirebaseAuth.instance.currentUser;
                             String userw = " ";
                             if (user != null) userw = user.uid;
-                           
-                            adduser(userw, name, bio, _datetime, sno, genderint,
-                                branchint, year,imgurl??'https://t3.ftcdn.net/jpg/03/46/83/96/240_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg');
-                            Navigator.of(context).pushNamedAndRemoveUntil('/email_verification/', (route) => false);
+
+                            adduser(
+                                userw,
+                                name,
+                                bio,
+                                _datetime,
+                                sno,
+                                genderint,
+                                branchint,
+                                year,
+                                imgurl ??
+                                    'https://t3.ftcdn.net/jpg/03/46/83/96/240_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg');
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/email_verification/', (route) => false);
                           },
                           child: const Text(
                             "Sumbit",

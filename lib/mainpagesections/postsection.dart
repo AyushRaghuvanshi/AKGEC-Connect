@@ -8,9 +8,9 @@ class Postsection extends StatefulWidget {
   State<Postsection> createState() => _PostsectionState();
 }
 
-late TextEditingController post;
-
 class _PostsectionState extends State<Postsection> {
+  late TextEditingController post;
+
   @override
   void initState() {
     // TODO: implement initState

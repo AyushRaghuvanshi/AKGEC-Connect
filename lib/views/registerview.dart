@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project/views/Popup.dart';
 
@@ -123,10 +122,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   context, 'Please enter you Password');
                               return;
                             }
-                            // }else if(password.length<=4){
-                            //   await showErrorPopup(context, 'Weak Password');
-                            //   return;
-                            // }
+
                             try {
                               await FirebaseAuth.instance
                                   .createUserWithEmailAndPassword(

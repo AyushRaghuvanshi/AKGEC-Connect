@@ -3,26 +3,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project/cards/Postcar.dart';
 import 'package:project/cards/nopostyet.dart';
-import 'package:project/views/mainpage.dart';
 
 class ProfileSection extends StatefulWidget {
-  const ProfileSection({Key? key}) : super(key: key);
-
+  const ProfileSection(
+      {Key? key,
+      required this.profilepicture,
+      required this.name,
+      required this.bio,
+      required this.year})
+      : super(key: key);
+  final String name, bio, profilepicture;
+  final int year;
   @override
   State<ProfileSection> createState() => _ProfileSectionState();
 }
 
-var post_lists;
-var user = FirebaseAuth.instance.currentUser;
-var uid = user?.uid;
-var l;
-List<Widget> posts = [];
-
 class _ProfileSectionState extends State<ProfileSection> {
+  var post_lists;
+  var uid = FirebaseAuth.instance.currentUser?.uid;
+
+  var l;
+  List<Widget> posts = [];
   void create_list(var l) {
     posts = [];
     for (int i = 0; i < l.data().length; i++) {
-      posts.add(Postcard(i: i));
+      String post = l.data()[i.toString()]['data'];
+      posts.add(Postcard(
+          profilepicture: widget.profilepicture,
+          name: widget.name,
+          post: post));
     }
   }
 
@@ -49,7 +58,7 @@ class _ProfileSectionState extends State<ProfileSection> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(200)),
                         child: Image.network(
-                          a['Profile Picture'],
+                          widget.profilepicture,
                           height: 125,
                           width: 125,
                         ))),
@@ -61,20 +70,20 @@ class _ProfileSectionState extends State<ProfileSection> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(a['name'],
+                    Text(widget.name,
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20)),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
-                        a['bio'],
+                        widget.bio,
                         style: const TextStyle(fontSize: 15),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Text(
-                        a['year'].toString(),
+                        widget.year.toString(),
                         style: const TextStyle(fontSize: 15),
                       ),
                     )

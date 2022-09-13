@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conditional_builder/conditional_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project/cards/nopostyet.dart';
 import 'package:project/mainpagesections/firstpage.dart';
 import 'package:project/mainpagesections/msgpage.dart';
 
@@ -9,6 +9,8 @@ import 'package:project/mainpagesections/profilesection.dart';
 import 'package:project/mainpagesections/postsection.dart';
 
 import 'package:project/views/popup.dart';
+
+import '../mainpagesections/Searchuser.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -18,16 +20,22 @@ class MainPage extends StatefulWidget {
 }
 
 enum MenuAction { logout }
-var a;
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  var a;
+
   bool k = false;
+  String url =
+      "https://t3.ftcdn.net/jpg/03/46/83/96/240_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg";
 
   final String? user = FirebaseAuth.instance.currentUser?.uid;
+  var future;
 
   @override
   void initState() {
+    future =
+        FirebaseFirestore.instance.collection('Users').doc(user).snapshots();
     super.initState();
   }
 
@@ -36,9 +44,23 @@ class _MainPageState extends State<MainPage> {
     List sections = [
       const FirstPage(),
       const Postsection(),
+      const Searchuser(),
       const MsgPage(),
-      const ProfileSection()
     ];
+    try {
+      sections = [
+        const FirstPage(),
+        const Postsection(),
+        const Searchuser(),
+        const MsgPage(),
+        ProfileSection(
+          profilepicture: a["Profile Picture"],
+          name: a["name"],
+          bio: a["bio"],
+          year: a["year"],
+        )
+      ];
+    } catch (e) {}
 
     return Scaffold(
       appBar: AppBar(
@@ -81,26 +103,7 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
-          child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Users')
-                  .doc(user)
-                  .snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  a = snapshot.data;
-
-                  k = true;
-
-                  return sections[_selectedIndex];
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
-        ),
+        child: SingleChildScrollView(child: sections[_selectedIndex]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -113,20 +116,36 @@ class _MainPageState extends State<MainPage> {
             label: 'Posts',
           ),
           const BottomNavigationBarItem(
+            icon: Icon(Icons.search_rounded, color: Colors.black),
+            label: 'Explore',
+          ),
+          const BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded, color: Colors.black),
-            label: 'chat',
+            label: 'Message',
           ),
           BottomNavigationBarItem(
-            icon: ConditionalBuilder(
-              condition: k,
-              builder: (context) => ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  child: Image.network(
-                    a['Profile Picture'],
-                    height: 30,
-                    width: 30,
-                  )),
-            ),
+            icon: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                child: StreamBuilder(
+                  stream: future,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data != null) {
+                        a = snapshot.data;
+                        return Image.network(
+                          a["Profile Picture"],
+                          height: 30,
+                          width: 30,
+                        );
+                      }
+                    }
+                    return Image.network(
+                      url,
+                      height: 30,
+                      width: 30,
+                    );
+                  },
+                )),
             label: 'Profile',
           ),
         ],

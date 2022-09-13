@@ -20,11 +20,17 @@ void addpost(String post, String? uid) async {
   var a =
       await FirebaseFirestore.instance.collection("PostsUsers").doc(uid).get();
   int? len = a.data()?.length;
+  var l = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
 
   len ??= 0;
 
   FirebaseFirestore.instance.collection('PostsUsers').doc(uid).set({
-    len.toString(): post,
+    len.toString(): {
+      'data': post,
+      'time': DateTime.now(),
+      'pfc': l.data()!['Profile Picture'],
+      'name': l.data()!['name']
+    },
   }, SetOptions(merge: true));
 }
 
