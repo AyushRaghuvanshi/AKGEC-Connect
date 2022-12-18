@@ -16,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 
 var post_lists;
 bool isfollowed = false;
-String follow = "", pfc = "";
+String follow = "Follow", pfc = "";
 var l, a;
 List<Widget> posts = [];
 

@@ -107,7 +107,7 @@ class _RegisterViewState extends State<RegisterView> {
                             onSurface: Colors.grey,
                           ),
                           onPressed: () async {
-                            final email = _email.text;
+                            final email = _email.text.trim().toLowerCase();
                             final password = _password.text;
                             if (email == '' && password == '') {
                               await showErrorPopup(context,

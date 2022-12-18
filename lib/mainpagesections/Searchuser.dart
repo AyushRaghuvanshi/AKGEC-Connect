@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +74,7 @@ class _SearchuserState extends State<Searchuser> {
       );
 
   void searchname(String query) {
+    log(query);
     final someuser = [];
     query.toLowerCase();
     for (int i = 0; i < user.length; i++) {
@@ -83,6 +86,7 @@ class _SearchuserState extends State<Searchuser> {
         someuser.add(user[i]);
       }
     }
+    print(someuser.toString());
     setState(() {
       this.query = query;
       this.someuser = someuser;

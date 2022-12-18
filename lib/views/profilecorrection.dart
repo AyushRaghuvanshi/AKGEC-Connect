@@ -115,7 +115,14 @@ class _ProfileState extends State<Profile> {
                         const Text("Name:"),
                         SizedBox(
                           width: width,
-                          child: TextField(
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: ((value) {
+                              if (value == '') {
+                                return "Field should not be empty";
+                              }
+                            }),
                             controller: _name,
                             autocorrect: false,
                             enableSuggestions: false,
@@ -136,7 +143,14 @@ class _ProfileState extends State<Profile> {
                         const Text("Biography:"),
                         SizedBox(
                           width: width,
-                          child: TextField(
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: ((value) {
+                              if (value == '') {
+                                return "Field should not be empty";
+                              }
+                            }),
                             controller: _biography,
                             obscureText: false,
                             autocorrect: false,
@@ -378,14 +392,24 @@ class _ProfileState extends State<Profile> {
                             onSurface: Colors.grey,
                           ),
                           onPressed: () async {
-                            final name = _name.text;
-                            final bio = _biography.text;
-                            final sno = _sno.text;
+                            final name = _name.text.trim();
+                            final bio = _biography.text.trim();
+                            final sno = _sno.text.trim();
+                            if (_year.text.trim() == "") {
+                              await showErrorPopup(context,
+                                  'Please Enter you Year of Admission');
+                              return;
+                            }
                             final year = int.parse(_year.text);
 
                             if (name == "") {
                               await showErrorPopup(
                                   context, 'Please Enter you Name');
+                              return;
+                            }
+                            if (bio == "") {
+                              await showErrorPopup(
+                                  context, 'Please Enter you Bio');
                               return;
                             }
                             final user = FirebaseAuth.instance.currentUser;
